@@ -2,11 +2,19 @@ from flask import Flask, render_template, session, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from datetime import timedelta
+from .extensions.api import genre_request , url_genre , params_api
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object('project.config.default')
 
 db = SQLAlchemy(app)
+    
+#LOGGING
+from .extensions.logging import create_log_file
+
+# CREATE SYSTEM LOG
+log_system = create_log_file('MOOVIE_RECOMMENDATION_LOG')
+log_system.info('Start...')
 
 #LOGINMANAGER
 login_manager = LoginManager()
@@ -20,12 +28,6 @@ login_manager.needs_refresh_message = 'Lépjen be újra!'
 def load_user(user_id):
     return User.query.get(user_id)
 
-#LOGGING
-from .extensions.logging import create_log_file
-
-# CREATE SYSTEM LOG
-log_system = create_log_file('MOOVIE_RECOMMENDATION_LOG')
-log_system.info('Start...')
 
 # MODEL
 from .model.user import User
@@ -62,10 +64,20 @@ def handle_exception(e):
 @app.route('/')
 def index():
     return render_template('home.html')
-    
-@app.route('/asd')
-def indexx():
-    return render_template('home.html')
+
+
+
+data = genre_request(url_genre,params_api)
+if type(data) != str:
+    for r in data['genres']:
+        genres = Genre(r['id'], r['name'] )
+        db.session.add(genres)
+        db.session.commit()
+else:
+    log_system.error = data
+
+
+#logolni a hibát.
 
 # Genre táblába adatfelvitel
 # kategoria = Genre('')

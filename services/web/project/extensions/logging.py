@@ -1,17 +1,17 @@
 import os
 import logging
 from logging.handlers import TimedRotatingFileHandler
-from ..config.default import LOG_PATH, LOG_BACKUP_COUNT, LOG_LEVEL
+from .. import app
 
 def create_log_file(log_file_name):
     # if it does not exist then make a log folder
-    if not os.path.exists(LOG_PATH):
-        os.makedirs(LOG_PATH)
+    if not os.path.exists(app.config['LOG_PATH']):
+        os.makedirs(app.config['LOG_PATH'])
 
     log = logging.getLogger(log_file_name)
-    log.setLevel(LOG_LEVEL)
+    log.setLevel(app.config['LOG_LEVEL'])
     loggerStreamHandler = logging.StreamHandler()
-    loggerStreamHandler.setLevel(LOG_LEVEL)
+    loggerStreamHandler.setLevel(app.config['LOG_LEVEL'])
 
     logFormatter = logging.Formatter(
         '%(asctime)s [%(name)s] %(filename)-'
@@ -20,11 +20,11 @@ def create_log_file(log_file_name):
     log.addHandler(loggerStreamHandler)
 
     loggerfileHandler = TimedRotatingFileHandler(
-        filename='{0}{1}.txt'.format(LOG_PATH,log_file_name),
+        filename='{0}{1}.txt'.format(app.config['LOG_PATH'],log_file_name),
         when='midnight',
         interval=1,
         encoding = "UTF-8",
-        backupCount=LOG_BACKUP_COUNT)
+        backupCount=app.config['LOG_BACKUP_COUNT'])
 
     loggerfileHandler.suffix = '%Y%m%d.txt'
     loggerfileHandler.mode = 'a'

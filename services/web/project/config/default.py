@@ -15,7 +15,7 @@ USE_RELOADER = os.getenv('USE_RELOADER')
 # Flask
 SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG_TB_INTERCEPT_REDIRECTS = False
-LOG_PATH = '{0}/log/'.format(os.getenv('FLASK_PATH'))
+LOG_PATH = '{0}/log/log/'.format(os.getenv('FLASK_PATH'))
 if isinstance(os.getenv('LOG_BACKUP_COUNT'), int):
     LOG_BACKUP_COUNT = int(os.getenv('LOG_BACKUP_COUNT')) # days
 else:

@@ -7,7 +7,7 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 url_movie = 'https://api.themoviedb.org/3/discover/movie'
-url_genre = 'https://api.themoviedb.org/3/genre/movie/list'
+url_genre = 'https://api.themoviedb.org/3/genre/moviee/list'
 api_key = 'a151c76b6aad5c4efbeac150479b0718'
 years = ['2015', '2016']
 
@@ -15,7 +15,7 @@ prmg = ['2022-09-30']
 # prmg = ['1975-01-01']
 prml = ['2022-09-30']
 page = 1
-params_genre = {
+params_api = {
     'api_key': api_key
 }
 params = {
@@ -24,6 +24,15 @@ params = {
     'primary_release_date.lte' : prml ,  
     'page' : page
 }
+
+def genre_request(url_genre, params_api ):
+    response = requests.get(url_genre, headers="", params=params_api, verify=False)
+    if  response.status_code == 200:
+        response = json.loads(response.text, strict=False)
+        return response
+    else:
+        response = json.loads(response.text, strict=False)
+        return response["status_message"]
 
 def main_request(url_movie, params):
     response = requests.get(url_movie, headers="", params=params, verify=False)
