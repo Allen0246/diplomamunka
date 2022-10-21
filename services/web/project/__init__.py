@@ -74,7 +74,7 @@ if type(data) != str:
         db.session.add(genres)
         db.session.commit()
 else:
-    log_system.error = data
+    log_system.error = data()
 
 
 #logolni a hibát.
