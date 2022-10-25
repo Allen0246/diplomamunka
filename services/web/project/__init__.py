@@ -27,6 +27,7 @@ login_manager.needs_refresh_message = 'Lépjen be újra!'
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(user_id)
+    
 
 
 # MODEL
@@ -66,55 +67,20 @@ def index():
     return render_template('home.html')
 
 
+# Genre adatt felvitel
 
 data = genre_request(url_genre,params_api)
 if type(data) != str:
     for r in data['genres']:
-        genres = Genre(r['id'], r['name'] )
-        db.session.add(genres)
-        db.session.commit()
+        genre_db = Genre.query.filter_by(genre=r['name']).first()
+        if not genre_db:
+            log_system.info('Az alábbi műfaj {0} hozzáadva'.format(r['name']))
+            genres = Genre(r['id'], r['name'] )
+            db.session.add(genres)
+            db.session.commit()
 else:
-    log_system.error = data()
+    log_system.error('Az alábbi miatt nem sikerült felvinni az adatokat {0}'.format(data(url_genre,params_api)))
 
-
-#logolni a hibát.
-
-# Genre táblába adatfelvitel
-# kategoria = Genre('')
-# db.session.add(kategoria)
-# db.session.commit()
-
-
-
-# Action =Genre(genre_id = '28' , genre = 'Action')
-# Adventure = Genre(genre_id = '12' , genre = 'Adventure')
-# Animation = Genre(genre_id = '16' , genre = 'Animation')
-# Comedy = Genre(genre_id = '35' , genre = 'Comedy')
-# Crime = Genre(genre_id = '80' , genre = 'Crime')
-# Documentary = Genre(genre_id = '99' , genre = 'Documentary')
-# Drama = Genre(genre_id = '18' , genre = 'Drama')
-# Family = Genre(genre_id = '10751' , genre = 'Family')
-# Fantasy = Genre(genre_id = '14' , genre = 'Fantasy')
-# History = Genre(genre_id = '36' , genre = 'History')
-# Horror = Genre(genre_id = '27' , genre = 'Horror')
-# Music = Genre(genre_id = '10402' , genre = 'Music')
-# Mystery = Genre(genre_id = '9648' , genre = 'Mystery')
-# Romance = Genre(genre_id = '10749' , genre = 'Romance')
-# Science_Fiction = Genre(genre_id = '878' , genre = 'Science Fiction')
-# TV_Movie = Genre(genre_id = '10770' , genre = 'TV Movie')
-# Thriller = Genre(genre_id = '53' , genre = 'Thriller')
-# War = Genre(genre_id = '10752' , genre = 'War')
-# Western = Genre(genre_id = '37' , genre = 'Western')
-
-# db.session.add(Action,Adventure,Animation)
-# db.session.add(Comedy,Crime,Documentary)
-# db.session.add(Drama,Family,Fantasy)
-# db.session.add(History,Horror,Music)
-# db.session.add(Mystery,Romance,Science_Fiction)
-# db.session.add(TV_Movie,Thriller,War,Western)
-# db.session.commit()
-
-
-# # THREADS
+# THREADS
 
 
