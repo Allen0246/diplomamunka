@@ -1,3 +1,4 @@
+from cmath import log
 from flask import Flask, render_template, session, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -68,7 +69,7 @@ def index():
 
 
 # Genre adatt felvitel
-
+log_system.info('Genre adatfelvitel megkezdése')
 data = genre_request(url_genre,params_api)
 if type(data) != str:
     for r in data['genres']:
