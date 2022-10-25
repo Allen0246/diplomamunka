@@ -7,7 +7,7 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 url_movie = 'https://api.themoviedb.org/3/discover/movie'
-url_genre = 'https://api.themoviedb.org/3/genre/moviee/list'
+url_genre = 'https://api.themoviedb.org/3/genre/movie/list'
 api_key = 'a151c76b6aad5c4efbeac150479b0718'
 years = ['2015', '2016']
 
