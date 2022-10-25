@@ -81,6 +81,6 @@ if type(data) != str:
 else:
     log_system.error('Az alábbi miatt nem sikerült felvinni az adatokat {0}'.format(data(url_genre,params_api)))
 
-# THREADS
+# THREADSdd
 
 
