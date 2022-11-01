@@ -55,15 +55,26 @@ def genre_result(response):
 
 
 # 1 hónap múlva lévő idő
-datenow = date.today()
-datebefor = date.today() + relativedelta(months=-1)
-print (datenow)
-print (datebefor)
+# datenow = date.today()
+# datebefor = date.today() + relativedelta(months=-1)
+# print (datenow)
+# print (datebefor)
 
-from services.web.project.model.movie import Movie
 
 movie_data = movie_request(url_movie,params_movie)
-for x in range (1,get_pages(movie_data)+1):
-    movie_db = Movie.query.filter_by(title=x['title']).first()
+for xyz in range (1,get_pages(movie_data)+1):
+    pass
+print(xyz)
 
-print(movie_db)
+
+
+
+# title_list= []
+# data = main_request(url, params)
+# for x in range (1,get_pages(data)+1):
+#     print(x)
+#     params['page']=x
+#     title_list.extend(title_result(main_request(url, params)))
+# print(title_list)
+# print("title_listben szereplő adatok db száma")
+# print(len(title_list))
