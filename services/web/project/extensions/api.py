@@ -18,7 +18,7 @@ page = 1
 params_api = {
     'api_key': api_key
 }
-params = {
+params_movie = {
     'api_key': api_key,
     'primary_release_date.gte' : prmg ,
     'primary_release_date.lte' : prml ,  
@@ -34,25 +34,28 @@ def genre_request(url_genre, params_api ):
         response = json.loads(response.text, strict=False)
         return response["status_message"]
 
-def main_request(url_movie, params):
-    response = requests.get(url_movie, headers="", params=params, verify=False)
+def movie_request(url_movie, params_movie):
+    response = requests.get(url_movie, headers="", params=params_movie, verify=False)
     if  response.status_code == 200:
         response = json.loads(response.text, strict=False)
         return response
+    else:
+        response = json.loads(response.text, strict=False)
+        return response["status_message"]
 
 def get_pages(response):
     return response['total_pages']
 
 def title_result(response):
-    title_result = []
+    # title_result = []
     for item in response['results']:
-        char = item['title']
-        title_result.append(char)
+        title_result = item['title']
+        # title_result.append(char)
     return title_result
 
 def genre_result(response):
-    genre_id = []
+    # genre_id = []
     for item in response['results']:
-        char = item['genre_ids']
-        genre_id.append(char)
+        genre_id = item['genre_ids']
+        # genre_id.append(char)
     return genre_id
