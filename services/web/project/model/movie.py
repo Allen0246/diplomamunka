@@ -3,11 +3,11 @@ from .. import db
 from flask_sqlalchemy import SQLAlchemy
 
 class Movie(db.Model):
-    __tablename__ = 'moovie'
+    __tablename__ = 'movie'
 
     movieId = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False, unique=True)
-    genre_id = db.Column(db.Integer, db.Foreignkey('genre.id'))
+    genre_id = db.Column(db.Integer, ForeignKey('genre.genre_id'))
 
 
     def __init__(self,title,genre_id):
