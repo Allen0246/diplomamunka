@@ -4,8 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 class Genre(db.Model):
     __tablename__ = 'genre'
 
-    id = db.Column(db.integer, primary_key=True)
-    genre_id = db.relationship('genre_id' , backref='genre' )
+    genre_id = db.Column(db.Integer, nullable=False, unique=True, primary_key=True)
     genre = db.Column(db.String(100), nullable=False, unique=True)
 
     def __init__(self, genre_id,genre):

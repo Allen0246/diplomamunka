@@ -1,5 +1,5 @@
 /db/postgres/
-/project/log/
+/services/web/log/
 
 
 # Byte-compiled / optimized / DLL files
