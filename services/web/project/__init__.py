@@ -75,26 +75,27 @@ if type(genre_data) != str:
     for r in genre_data['genres']:
         genre_db = Genre.query.filter_by(genre=r['name']).first()
         if not genre_db:
-            log_system.info('Sikeresen hozzá lettek adva a műfajok .')
             genres = Genre(r['id'], r['name'] )
             db.session.add(genres)
             db.session.commit()
+            log_system.info('Sikeresen hozzá let adva a követekző műfaj: {0}'.format(r['name']))
 else:
     log_system.error('Az alábbi miatt nem sikerült felvinni a műfaj adatokat: {0}'.format(genre_data))
 
 log_system.info('Movie adatfelvitel megkezdése ...')
-movie_data = (title_result(movie_request(url_movie, params_movie)))
+movie_data = movie_request(url_movie, params_movie)
 if type(movie_data) != str:
-    movie_db = Movie.query.filter_by(movie_data['title']).first()
-    if not movie_db:
-        for x in range (1,get_pages(movie_data)+1):
-            params_movie['page']=x
-            title_list = (title_result(movie_request(url_movie, params_movie)))
-            genre_id = (genre_result(movie_request(url_movie, params_movie)))
-            log_system.info('Sikeresen hozzá lettek adva a műfaj id-k és film címek.')
-            movie_result = Movie(title_list,genre_id)
-            db.session.add(movie_result)
-            db.session.commit()
+    for r in movie_data['results']:
+        movie_db = Movie.query.filter_by(movie_data['title']).first()
+        if not movie_db:
+            for x in range (1,get_pages(movie_data)+1):
+                params_movie['page']=x
+                title_list = (title_result(movie_request(url_movie, params_movie)))
+                genre_id = (genre_result(movie_request(url_movie, params_movie)))
+                movie_result = Movie(title_list,genre_id)
+                db.session.add(movie_result)
+                db.session.commit()
+                log_system.info('Sikeresen hozzá lettek adva a műfaj id-k és film címek.')
 else:
     log_system.error('Az alábbi miatt nem sikerült felvinni a film és műfaj id-ket: {0}'.format(movie_data))
 
