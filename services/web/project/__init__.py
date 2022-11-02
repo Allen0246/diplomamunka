@@ -3,7 +3,7 @@ from flask import Flask, render_template, session, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from datetime import timedelta
-from .extensions.api import genre_request , url_genre , params_api
+from .extensions.api import genre_request, genre_result , url_genre , params_api, movie_request, url_movie, params_movie, get_pages, title_result
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object('project.config.default')
@@ -69,19 +69,36 @@ def index():
 
 
 # Genre adatt felvitel
-log_system.info('Genre adatfelvitel megkezdése')
-data = genre_request(url_genre,params_api)
-if type(data) != str:
-    for r in data['genres']:
+log_system.info('Genre adatfelvitel megkezdése ...')
+genre_data = genre_request(url_genre,params_api)
+if type(genre_data) != str:
+    for r in genre_data['genres']:
         genre_db = Genre.query.filter_by(genre=r['name']).first()
         if not genre_db:
-            log_system.info('Az alábbi műfaj {0} hozzáadva'.format(r['name']))
+            log_system.info('Sikeresen hozzá lettek adva a műfajok .')
             genres = Genre(r['id'], r['name'] )
             db.session.add(genres)
             db.session.commit()
 else:
-    log_system.error('Az alábbi miatt nem sikerült felvinni az adatokat {0}'.format(data(url_genre,params_api)))
+    log_system.error('Az alábbi miatt nem sikerült felvinni a műfaj adatokat: {0}'.format(genre_data))
 
-# THREADSdd
+log_system.info('Movie adatfelvitel megkezdése ...')
+movie_data = (title_result(movie_request(url_movie, params_movie)))
+if type(movie_data) != str:
+    movie_db = Movie.query.filter_by(movie_data['title']).first()
+    if not movie_db:
+        for x in range (1,get_pages(movie_data)+1):
+            params_movie['page']=x
+            title_list = (title_result(movie_request(url_movie, params_movie)))
+            genre_id = (genre_result(movie_request(url_movie, params_movie)))
+            log_system.info('Sikeresen hozzá lettek adva a műfaj id-k és film címek.')
+            movie_result = Movie(title_list,genre_id)
+            db.session.add(movie_result)
+            db.session.commit()
+else:
+    log_system.error('Az alábbi miatt nem sikerült felvinni a film és műfaj id-ket: {0}'.format(movie_data))
+
+
+# THREADS
 
 
