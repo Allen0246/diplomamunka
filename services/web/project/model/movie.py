@@ -8,7 +8,6 @@ class Movie(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     movieid = db.Column(db.Integer, nullable=False, unique=True)
     title = db.Column(db.String(100), nullable=False, unique=True)
-    genre_id = db.Column(db.Integer, ForeignKey('genre.genre_id'))
 
 
     def __init__(self,title,genre_id):

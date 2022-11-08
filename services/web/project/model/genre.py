@@ -10,7 +10,7 @@ class Genre(db.Model):
     __tablename__ = 'genre'
 
     id = db.Column(db.Integer, primary_key=True)
-    genre_id = db.Column(db.Integer, db.ForeignKey('movie.movieid'))
+    movies = db.relationship("Child", secondary=movie_genre, backref="genres") 
     genre = db.Column(db.String(100), nullable=False, unique=True)
  
 
