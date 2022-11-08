@@ -5,7 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 class Movie(db.Model):
     __tablename__ = 'movie'
 
-    movieId = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    movieid = db.Column(db.Integer, nullable=False, unique=True)
     title = db.Column(db.String(100), nullable=False, unique=True)
     genre_id = db.Column(db.Integer, ForeignKey('genre.genre_id'))
 
