@@ -6,6 +6,9 @@ class Genre(db.Model):
 
     genre_id = db.Column(db.Integer, nullable=False, unique=True, primary_key=True)
     genre = db.Column(db.String(100), nullable=False, unique=True)
+    # id = db.Column(db.integer, primary_key=True)
+    # genre_id = db.relationship('genre_id' , backref='genre' )
+    # genre = db.Column(db.String(100), nullable=False, unique=True)
 
     def __init__(self, genre_id,genre):
         self.genre_id = genre_id
