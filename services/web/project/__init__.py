@@ -3,7 +3,7 @@ from flask import Flask, render_template, session, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from datetime import timedelta
-from .extensions.api import genre_request , url_genre , params_api, movie_request, url_movie, params_movie, get_pages, title_result1, genre_result1
+from .extensions.api import genre_request , url_genre , params_api, movie_request, url_movie, params_movie, get_pages, title_result, genre_result
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object('project.config.default')
@@ -90,8 +90,8 @@ if type(movie_data) != str:
         if not movie_db:
             for x in range (1,get_pages(movie_data)+1):
                 params_movie['page']=x
-                title_list = (title_result1(url_movie, params_movie))
-                genre_id = (genre_result1(url_movie, params_movie))
+                title_list = (title_result(url_movie, params_movie))
+                genre_id = (genre_result(url_movie, params_movie))
                 movie_result = Movie(title_list,genre_id)
                 db.session.add(movie_result)
                 db.session.commit()

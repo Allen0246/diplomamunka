@@ -7,7 +7,7 @@ import requests
 import urllib3
 import json
 import pandas as pd
-from . import db
+from extensions.api import url_movie, params_movie
 
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
@@ -22,16 +22,29 @@ params_api = {
 
 
 
-def genre_request(url_genre, params_api ):
-    response = requests.get(url_genre, headers="", params=params_api, verify=False)
-    if  response.status_code == 200:
-        response = json.loads(response.text, strict=False)
-        return response
-    else:
-        response = json.loads(response.text, strict=False)
-        return response["status_message"]
-
-data = genre_request(url_genre, params_api )
-print(data)
 
 
+# data = genre_result1(url_genre, params_api )
+# print(data)
+
+responsee = requests.get(url_movie, headers="", params=params_movie, verify=False)
+if  responsee.status_code == 200:
+    responsee = json.loads(responsee.text, strict=False)
+    for item in responsee['results']:
+        title_result = item['title']
+        print(title_result)
+
+
+# def title_result(response):
+#     # title_result = []
+#     for item in response['results']:
+#         title_result = item['title']
+#         # title_result.append(char)
+#     return title_result
+
+def increment(number):
+    def inner_increment():
+        return number + 1
+    return inner_increment()
+ 
+print(increment(10))
