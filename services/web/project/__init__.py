@@ -3,7 +3,7 @@ from flask import Flask, render_template, session, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from datetime import timedelta
-from .extensions.api import genre_request , url_genre , params_api, movie_request, url_movie, params_movie, get_pages, title_result1, genre_result1
+from .extensions.api import genre_request , url_genre , params_api, movie_request, url_movie, params_movie, get_pages, title_result, genre_result ,movieid_result
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object('project.config.default')
@@ -79,6 +79,8 @@ if type(genre_data) != str:
             db.session.add(genres)
             db.session.commit()
             log_system.info('Sikeresen hozzá let adva a követekző műfaj: {0}'.format(r['name']))
+        else:
+            log_system.info('Már szerepel az adatbázisban: {0}'.format(r['name']))
 else:
     log_system.error('Az alábbi miatt nem sikerült felvinni a műfaj adatokat: {0}'.format(genre_data))
 
@@ -86,13 +88,14 @@ log_system.info('Movie adatfelvitel megkezdése ...')
 movie_data = movie_request(url_movie, params_movie)
 if type(movie_data) != str:
     for r in movie_data['results']:
-        movie_db = Movie.query.filter_by(movie_data['title']).first()
+        movie_db = Movie.query.filter_by(title=r['title']).first()
         if not movie_db:
             for x in range (1,get_pages(movie_data)+1):
                 params_movie['page']=x
-                title_list = (title_result1(url_movie, params_movie))
-                genre_id = (genre_result1(url_movie, params_movie))
-                movie_result = Movie(title_list,genre_id)
+                movie_id = (movieid_result(movie_data))
+                title_list = (title_result(movie_data))
+                genre_id = (genre_result(movie_data))
+                movie_result = Movie(movie_id,title_list,genre_id)
                 db.session.add(movie_result)
                 db.session.commit()
                 log_system.info('Sikeresen hozzá lettek adva a műfaj id-k és film címek.')
