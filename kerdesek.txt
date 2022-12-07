@@ -1,0 +1,10 @@
+for response in api_responses.get('results', list()):
+    id = response.get('id')
+    title = response.get('title')
+    genre_ids = response.get('genre_ids')
+    movie = Movie(id, title)
+    # ÖSSZERENDELÉS
+    movie.osszerenedels(genre_ids)
+
+
+https://www.youtube.com/watch?v=47i-jzrrIGQ&t=259s
