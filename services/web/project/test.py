@@ -102,3 +102,11 @@ for n in names:
 # l = ['01', '1.0', '[0.2]']
 # valami = [i.strip('[]') for i in l]
 # print(valami)
+
+
+def title_result(response):
+    result = list()
+    for item in response['results']:
+        result.append(item['title'])
+        title_result = item['title']
+    return result

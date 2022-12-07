@@ -3,16 +3,16 @@ from flask_sqlalchemy import SQLAlchemy
 from .movie import Movie
 
 
-# movie_genre = db.table('movie_genre',
-#     db.Column('movie_id', db.Integer, db.ForeignKey('movie.id')),
-#     db.Column('genre_id', db.Integer, db.ForeignKey('genre.id'))
-# )
+movie_genre = db.table('movie_genre',
+    db.Column('movie_id', db.Integer, db.ForeignKey('movie.id')),
+    db.Column('genre_id', db.Integer, db.ForeignKey('genre.id'))
+)
 
 class Genre(db.Model):
     __tablename__ = 'genre'
 
     id = db.Column(db.Integer, primary_key=True)
-    # movies = db.relationship('Movie', secondary=movie_genre, backref='genres') 
+    movies = db.relationship('Movie', secondary=movie_genre, backref='genres') 
     genre = db.Column(db.String(100), nullable=False, unique=True)
  
 

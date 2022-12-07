@@ -48,6 +48,7 @@ def get_pages(response):
     return response['total_pages']
 
 def title_result(response):
+    title_result = None
     for item in response['results']:
         title_result = item['title']
     return title_result

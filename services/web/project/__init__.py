@@ -90,15 +90,13 @@ if type(movie_data) != str:
     for r in movie_data['results']:
         movie_db = Movie.query.filter_by(title=r['title']).first()
         if not movie_db:
-            for x in range (1,get_pages(movie_data)+1):
-                params_movie['page']=x
-                movie_id = (movieid_result(movie_data))
-                title_list = (title_result(movie_data))
-                genre_id = (genre_result(movie_data))
-                movie_result = Movie(movie_id,title_list,genre_id)
-                db.session.add(movie_result)
-                db.session.commit()
-                log_system.info('Sikeresen hozzá lettek adva a műfaj id-k és film címek.')
+            movie_id = (movieid_result(movie_data))
+            title_list = (title_result(movie_data))
+            genre_id = (genre_result(movie_data))
+            movie_result = Movie(movie_id,title_list)+y
+            db.session.add(movie_result)
+            db.session.commit()
+            log_system.info('Sikeresen hozzá lettek adva a műfaj id-k és film címek.')
 else:
     log_system.error('Az alábbi miatt nem sikerült felvinni a film és műfaj id-ket: {0}'.format(movie_data))
 
