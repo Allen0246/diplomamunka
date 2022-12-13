@@ -30,83 +30,28 @@ params_movie = {
     'page' : page
 }
 
-def get_pages(response):
-    return response['total_pages']
-
-
-def title_result(response):
-    for item in response['results']:
-        title_result = item['title']
-    return title_result
-
-def genre_result(response):
-    for item in response['results']:
-            list_int = item['genre_ids']
-            list_string = map(str, list_int)
-            genre_id=(', '.join(list(list_string)))
-    return genre_id
 
 
 def movie_request(url_movie, params_movie):
     response = requests.get(url_movie, headers="", params=params_movie, verify=False)
     if  response.status_code == 200:
         response = json.loads(response.text, strict=False)
-        return response
+        response_list = []
+        for page in range(1, response.get('total_pages') + 1):
+            params_movie['page']=page
+            response= requests.get(url_movie, headers="", params=params_movie, verify=False)
+            if  response.status_code == 200:
+                response = json.loads(response.text, strict=False)
+            response_list.append(response)
+        return response_list
     else:
         response = json.loads(response.text, strict=False)
         return response["status_message"]
+        
+movie_data= movie_request(url_movie,params_movie)
+print(movie_data)
 
-def title_result(response):
-    for item in response['results']:
-        title_result = item['title']
-    return title_result
-
-
-# def test():
-#     data = ['egy','kettő','három']
-#     for item in data:
-#         data2 = item[0]
-#         return data2
-
-# print(test())
-
-# data = movie_request(url_movie, params_movie)
-# data2 =genre_result(data)
-# data3 = title_result(data)
-# print(data2)
-
-
-# print(data['results'][0]['title'])
-# for item in data['results']:
-#     list_int = item['genre_ids']
-#     list_string = map(str, list_int)
-#     print(', '.join(list(list_string)))
-
-# s = ''.join(str(x) for x in data2)
-# print(s)
-names = ["Sam", "Peter", "James", "Julian", "Ann"]
-for n in names:
-    # print(number)
-    number = ['1' , '2', '3']
-    for item in number:
-        print(item)
-        print(n)
-# print(', '.join(names))
-
-
-# print(data3)
-
-# print (data['results'][0]['title'])
-# print(title_result(url_movie, params_movie))
-
-# l = ['01', '1.0', '[0.2]']
-# valami = [i.strip('[]') for i in l]
-# print(valami)
-
-
-def title_result(response):
-    result = list()
-    for item in response['results']:
-        result.append(item['title'])
-        title_result = item['title']
-    return result
+for response in movie_data['results']:
+    print(id = response['id'])
+    # title = response.get('title')
+    # genre_ids = response.get('genre_ids')

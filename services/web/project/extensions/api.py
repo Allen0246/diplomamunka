@@ -38,29 +38,32 @@ def movie_request(url_movie, params_movie):
     response = requests.get(url_movie, headers="", params=params_movie, verify=False)
     if  response.status_code == 200:
         response = json.loads(response.text, strict=False)
-        return response
+        response_list = []
+        for page in range(1, response['total_pages'] + 1):
+            params_movie['page']=page
+            response= requests.get(url_movie, headers="", params=params_movie, verify=False)
+            if  response.status_code == 200:
+                response = json.loads(response.text, strict=False)
+                response_list.extend(response['results'])
+        return response_list
     else:
         response = json.loads(response.text, strict=False)
         return response["status_message"]
 
+# def title_result(response):
+#     title_result = None
+#     for item in response['results']:
+#         title_result = item['title']
+#     return title_result
 
-def get_pages(response):
-    return response['total_pages']
+# def genre_result(response):
+#     for item in response['results']:
+#             list_int = item['genre_ids']
+#             list_string = map(str, list_int)
+#             genre_id=(', '.join(list(list_string)))
+#     return genre_id
 
-def title_result(response):
-    title_result = None
-    for item in response['results']:
-        title_result = item['title']
-    return title_result
-
-def genre_result(response):
-    for item in response['results']:
-            list_int = item['genre_ids']
-            list_string = map(str, list_int)
-            genre_id=(', '.join(list(list_string)))
-    return genre_id
-
-def movieid_result(response):
-    for item in response['results']:
-        movie_id = item['id']
-    return movie_id
+# def movieid_result(response):
+#     for item in response['results']:
+#         movie_id = item['id']
+#     return movie_id
