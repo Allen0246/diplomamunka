@@ -32,18 +32,30 @@ params_movie = {
 
 
 
+# def movie_request(url_movie, params_movie):
+#     response = requests.get(url_movie, headers="", params=params_movie, verify=False)
+#     if  response.status_code == 200:
+#         response = json.loads(response.text, strict=False)
+#     return response
+
+# movie_data= movie_request(url_movie,params_movie)
+# print(movie_data)
+
+
 def movie_request(url_movie, params_movie):
     response = requests.get(url_movie, headers="", params=params_movie, verify=False)
     if  response.status_code == 200:
         response = json.loads(response.text, strict=False)
-        response_list = []
+        response_tuple = ()
         for page in range(1, response.get('total_pages') + 1):
             params_movie['page']=page
             response= requests.get(url_movie, headers="", params=params_movie, verify=False)
             if  response.status_code == 200:
                 response = json.loads(response.text, strict=False)
-            response_list.append(response)
-        return response_list
+            response_tuple = list(response_tuple)
+            response_tuple.append(response)
+            response_tuple = tuple(response_tuple)
+        return response_tuple
     else:
         response = json.loads(response.text, strict=False)
         return response["status_message"]
@@ -51,7 +63,7 @@ def movie_request(url_movie, params_movie):
 movie_data= movie_request(url_movie,params_movie)
 print(movie_data)
 
-for response in movie_data['results']:
-    print(id = response['id'])
-    # title = response.get('title')
-    # genre_ids = response.get('genre_ids')
+# for response in movie_data.get('results'):
+#     print(id = response.get('id'))
+#     title = response.get('title')
+#     genre_ids = response.get('genre_ids')
